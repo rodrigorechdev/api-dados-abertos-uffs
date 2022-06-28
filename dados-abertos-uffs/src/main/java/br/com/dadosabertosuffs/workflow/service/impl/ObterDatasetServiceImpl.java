@@ -16,13 +16,13 @@ import com.google.gson.Gson;
 
 import br.com.dadosabertosuffs.constant.DadosAbertosConst;
 import br.com.dadosabertosuffs.entity.httpresponse.NomesDatasetsResponse;
-import br.com.dadosabertosuffs.workflow.service.DadosAbertosService;
+import br.com.dadosabertosuffs.workflow.service.ObterDatasetService;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @Service
 @RequiredArgsConstructor
-public class DadosAbertosServiceImpl implements DadosAbertosService {
+public class ObterDatasetServiceImpl implements ObterDatasetService {
 
     private final HttpClient httpClient = HttpClient.newBuilder().build();
     
