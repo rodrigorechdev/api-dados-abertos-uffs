@@ -26,11 +26,6 @@ public class ObterDatasetServiceImpl implements ObterDatasetService {
 
     private final HttpClient httpClient = HttpClient.newBuilder().build();
     
-    /**
-     * Obtém o "resource" mais recente do dataset.
-     * @throws InterruptedException
-     * @throws IOException
-     */
     @Override
     public List<String> obterNomesDatasets() throws IOException, InterruptedException {
         var httpRequest = criarRequest();
