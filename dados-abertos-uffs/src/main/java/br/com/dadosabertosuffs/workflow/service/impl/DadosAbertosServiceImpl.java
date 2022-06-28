@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import com.google.gson.Gson;
 
+import br.com.dadosabertosuffs.constant.DadosAbertosConst;
 import br.com.dadosabertosuffs.entity.httpresponse.NomesDatasetsResponse;
 import br.com.dadosabertosuffs.workflow.service.DadosAbertosService;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,6 @@ import lombok.RequiredArgsConstructor;
 public class DadosAbertosServiceImpl implements DadosAbertosService {
 
     private final HttpClient httpClient = HttpClient.newBuilder().build();
-    
-    private String URL_PORTAL_DADOS_ABERTOS_UFFS = "https://dados.uffs.edu.br/api/3/action/";
-    private String PATH_RECURSO = "package_list";
     
     /**
      * Obtém o "resource" mais recente do dataset.
@@ -54,9 +52,9 @@ public class DadosAbertosServiceImpl implements DadosAbertosService {
     }
 
     private URI getUri() {
-        return new DefaultUriBuilderFactory(URL_PORTAL_DADOS_ABERTOS_UFFS)
+        return new DefaultUriBuilderFactory(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
             .builder()
-            .path(PATH_RECURSO)
+            .path(DadosAbertosConst.PATH_RECURSO)
             .build();
     }
 }
