@@ -16,7 +16,8 @@ public class DiscenteWorkflow {
     @Autowired
     private final DadosAbertosServiceImpl dadosAbertosServiceImpl;
 
-    List<String> obterDiscente() throws IOException, InterruptedException {
+    public List<String> obterNomesDatasets() throws IOException, InterruptedException {
         return dadosAbertosServiceImpl.obterNomesDatasets();
     }
+
 }

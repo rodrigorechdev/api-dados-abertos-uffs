@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.dadosabertosuffs.workflow.service.impl.DadosAbertosServiceImpl;
+import br.com.dadosabertosuffs.workflow.DiscenteWorkflow;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,11 +23,11 @@ import lombok.RequiredArgsConstructor;
 public class DadosAbertosController {
     
     @Autowired
-    private final DadosAbertosServiceImpl dadosAbertosServiceImpl;
+    private final DiscenteWorkflow discenteWorkflow;
     
     @RequestMapping(value = "/discente", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> obterDiscente() throws IOException, InterruptedException {
-        var response = dadosAbertosServiceImpl.obterNomesDatasets();
+        var response = discenteWorkflow.obterNomesDatasets();
         return new ResponseEntity<List<String>>(response, HttpStatus.OK);
     }
 }
