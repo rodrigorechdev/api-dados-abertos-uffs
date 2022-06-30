@@ -19,6 +19,7 @@ import br.com.dadosabertosuffs.constant.DadosAbertosConst;
 import br.com.dadosabertosuffs.entity.httpresponse.DatasetShowResponse;
 import br.com.dadosabertosuffs.entity.httpresponse.DatasetShowResponseResultResources;
 import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponse;
+import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponseResult;
 import br.com.dadosabertosuffs.workflow.service.ObterRecursoService;
 import lombok.RequiredArgsConstructor;
 
@@ -45,14 +46,18 @@ public class ObterResourceServiceImpl implements ObterRecursoService {
 
     
     @Override
-    public ResourceResponse obterRecursoConteudo(String idRecurso) throws IOException, InterruptedException {
-        var httpRequest = criarRequestObterDatastoreConteudo(idRecurso);
-        var responseBody = httpClient
-            .send(httpRequest, HttpResponse.BodyHandlers.ofString())
-            .body();
-    
-        return new Gson()
-            .fromJson(responseBody, ResourceResponse.class);
+    public ResourceResponseResult obterRecursoConteudo(String idRecurso) {
+        try {
+            var httpRequest = criarRequestObterDatastoreConteudo(idRecurso);
+            var responseBody = httpClient
+                .send(httpRequest, HttpResponse.BodyHandlers.ofString())
+                .body();
+        
+            return new Gson().fromJson(responseBody, ResourceResponse.class).getResult();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
     }
 
     private HttpRequest criarRequestObterListaRecurso(String nomeDataset) {

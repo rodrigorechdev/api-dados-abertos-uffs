@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.dadosabertosuffs.workflow.activity.ObterIdRecursoPorDatasetActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterNomesDatasetsActivity;
+import br.com.dadosabertosuffs.workflow.activity.ObterRecursoConteudoActivity;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -20,6 +21,9 @@ public class DiscenteWorkflow {
     @Autowired
     private final ObterIdRecursoPorDatasetActivity obterIdRecursosPorDataset;
     
+    @Autowired
+    private final ObterRecursoConteudoActivity obterRecursoConteudo;
+    
     public List<String> obterNomesDatasets() throws IOException, InterruptedException {
         return obterNomesDatasets.execute();
     }
@@ -27,11 +31,9 @@ public class DiscenteWorkflow {
     public List<String> obterDatasetConteudo(String dataset) throws IOException, InterruptedException {
         var nomesDatasets = obterNomesDatasets.execute();
         var hashIdRecursosPorDataset = obterIdRecursosPorDataset.execute(nomesDatasets);
-
-        //TODO
-        //consultar cada recurso do hash nomesDatasets
-        //descobrir colunas com nomes iguais do meu dataset e salvar num hash novo.
-        
+        var hashRecursosConteudo = obterRecursoConteudo.execute(hashIdRecursosPorDataset);
+        //TODO descobrir colunas com nomes iguais do meu dataset e salvar num hash novo.
+        //hash<string(nomeDataset),object(nomeDatasetAlvo, nomeCampo)
         return null;
     }
 }
