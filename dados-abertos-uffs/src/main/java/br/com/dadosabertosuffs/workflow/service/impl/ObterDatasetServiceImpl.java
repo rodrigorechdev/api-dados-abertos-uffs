@@ -49,7 +49,7 @@ public class ObterDatasetServiceImpl implements ObterDatasetService {
     private URI getUri() {
         return new DefaultUriBuilderFactory(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
             .builder()
-            .path(DadosAbertosConst.PATH_RECURSO)
+            .path(DadosAbertosConst.PATH_RECURSO_LISTA)
             .build();
     }
 }
