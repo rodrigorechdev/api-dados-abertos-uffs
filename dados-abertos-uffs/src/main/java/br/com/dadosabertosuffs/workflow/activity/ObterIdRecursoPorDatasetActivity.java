@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.dadosabertosuffs.entity.dto.Resource;
 import br.com.dadosabertosuffs.entity.httpresponse.DatasetShowResponseResultResources;
 import br.com.dadosabertosuffs.workflow.service.impl.ObterResourceServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +29,11 @@ public class ObterIdRecursoPorDatasetActivity {
      * @throws IOException
      * @throws InterruptedException
      */
-    public HashMap<String, DatasetShowResponseResultResources> execute(List<String> nomesDatasets) throws IOException, InterruptedException {
-        HashMap<String, DatasetShowResponseResultResources> hashRecurso = new HashMap<>();
+    public HashMap<String, Resource> execute(List<String> nomesDatasets) throws IOException, InterruptedException {
+        HashMap<String, Resource> hashRecurso = new HashMap<>();
         for(String nomeDataset : nomesDatasets) {
             var listRecursosDeDataset = obterResourceService.obterRecursosDeDataset(nomeDataset);
-            var recurso = removeDicionario(listRecursosDeDataset);
+            var recurso = removeDicionario(listRecursosDeDataset).toResource();
             hashRecurso.put(nomeDataset, recurso);
         }
 
