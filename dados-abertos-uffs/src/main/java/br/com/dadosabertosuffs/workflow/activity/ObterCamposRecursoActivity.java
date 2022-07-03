@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.dadosabertosuffs.entity.dto.Resource;
-import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponseResult;
 import br.com.dadosabertosuffs.workflow.service.impl.ObterResourceServiceImpl;
 import lombok.RequiredArgsConstructor;
 
