@@ -2,8 +2,6 @@ package br.com.dadosabertosuffs.entity.httpresponse;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,6 +11,5 @@ import lombok.Getter;
 @EqualsAndHashCode
 public class NomesDatasetsResponse {
     
-    @JsonProperty("result")
     private List<String> result;
 }

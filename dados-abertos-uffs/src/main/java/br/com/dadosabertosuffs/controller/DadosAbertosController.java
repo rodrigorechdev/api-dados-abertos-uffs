@@ -28,6 +28,7 @@ public class DadosAbertosController {
     @RequestMapping(value = "/discente", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> obterDiscente() throws IOException, InterruptedException {
         var response = discenteWorkflow.obterNomesDatasets();
+        discenteWorkflow.obterDatasetConteudo("");
         return new ResponseEntity<List<String>>(response, HttpStatus.OK);
     }
 }
