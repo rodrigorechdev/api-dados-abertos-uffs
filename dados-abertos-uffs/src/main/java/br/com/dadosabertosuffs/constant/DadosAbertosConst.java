@@ -9,6 +9,7 @@ public class DadosAbertosConst {
 
     public final static String QUERY_RESOURCE_ID = "resource_id";
     public final static String QUERY_DATASET_ID = "id";
+    public final static String QUERY_PAGINACAO = "limit";
 
 
 }
