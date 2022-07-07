@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.dadosabertosuffs.workflow.service.impl.ObterDatasetServiceImpl;
+import br.com.dadosabertosuffs.workflow.service.ObterDatasetService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class ObterNomesDatasetsActivity {
     
     @Autowired
-    private final ObterDatasetServiceImpl obterDatasetService;
+    private final ObterDatasetService obterDatasetService;
 
     public List<String> execute() throws IOException, InterruptedException {
         return obterDatasetService.obterNomesDatasets();

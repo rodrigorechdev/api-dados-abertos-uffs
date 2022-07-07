@@ -20,13 +20,13 @@ import br.com.dadosabertosuffs.entity.httpresponse.DatasetShowResponse;
 import br.com.dadosabertosuffs.entity.httpresponse.DatasetShowResponseResultResources;
 import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponse;
 import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponseResult;
-import br.com.dadosabertosuffs.workflow.service.ObterRecursoService;
+import br.com.dadosabertosuffs.workflow.service.ObterResourceService;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @Service
 @RequiredArgsConstructor
-public class ObterResourceServiceImpl implements ObterRecursoService {
+public class ObterResourceServiceImpl implements ObterResourceService {
     
     private final HttpClient httpClient = HttpClient.newBuilder().build();
 

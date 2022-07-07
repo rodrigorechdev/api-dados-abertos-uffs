@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.dadosabertosuffs.entity.dto.Resource;
 import br.com.dadosabertosuffs.entity.httpresponse.DatasetShowResponseResultResources;
-import br.com.dadosabertosuffs.workflow.service.impl.ObterResourceServiceImpl;
+import br.com.dadosabertosuffs.workflow.service.ObterResourceService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class ObterIdRecursoPorDatasetActivity {
     
     @Autowired
-    private final ObterResourceServiceImpl obterResourceService;
+    private final ObterResourceService obterResourceService;
     
     /**
      * Retorna hash onde a chave é o nome do dataset e o valor é um objeto com id e nome do recurso.
