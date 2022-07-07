@@ -5,7 +5,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,8 +15,6 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import com.google.gson.Gson;
 
 import br.com.dadosabertosuffs.constant.DadosAbertosConst;
-import br.com.dadosabertosuffs.entity.httpresponse.DatasetShowResponse;
-import br.com.dadosabertosuffs.entity.httpresponse.DatasetShowResponseResultResources;
 import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponse;
 import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponseResult;
 import br.com.dadosabertosuffs.workflow.service.ObterResourceService;
