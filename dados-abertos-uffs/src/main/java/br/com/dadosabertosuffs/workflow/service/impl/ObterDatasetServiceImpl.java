@@ -2,8 +2,6 @@ package br.com.dadosabertosuffs.workflow.service.impl;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpResponse;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
