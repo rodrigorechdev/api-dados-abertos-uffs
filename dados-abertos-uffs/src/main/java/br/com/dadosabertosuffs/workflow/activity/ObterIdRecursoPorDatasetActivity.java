@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import br.com.dadosabertosuffs.entity.dto.Resource;
 import br.com.dadosabertosuffs.entity.httpresponse.DatasetShowResponseResultResources;
 import br.com.dadosabertosuffs.workflow.service.ObterDatasetService;
-import br.com.dadosabertosuffs.workflow.service.ObterResourceService;
 import lombok.RequiredArgsConstructor;
 
 @Service
