@@ -10,6 +10,6 @@ import lombok.Getter;
 @EqualsAndHashCode
 public class ResourceResponseResult {
 
-    private List<ResourceResponseFieldResult> fields;
+    private List<ResourceResponseResultField> fields;
     
 }

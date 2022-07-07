@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 @Getter
 @EqualsAndHashCode
-public class ResourceResponseFieldResult {
+public class ResourceResponseResultField {
 
     private String type; 
 
