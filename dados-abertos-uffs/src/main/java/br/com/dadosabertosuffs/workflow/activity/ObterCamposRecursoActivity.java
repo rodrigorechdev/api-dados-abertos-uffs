@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.dadosabertosuffs.entity.dto.Resource;
-import br.com.dadosabertosuffs.workflow.service.impl.ObterResourceServiceImpl;
+import br.com.dadosabertosuffs.workflow.service.ObterResourceService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -15,12 +15,12 @@ import lombok.RequiredArgsConstructor;
 public class ObterCamposRecursoActivity {
     
     @Autowired
-    private final ObterResourceServiceImpl obterResourceService;
+    private final ObterResourceService obterResourceService;
 
     public HashMap<String, Resource> execute(HashMap<String, Resource> hashIdRecursosPorDataset) throws IOException, InterruptedException {
         
         hashIdRecursosPorDataset.forEach((nomeDataset, resource) -> {
-            var recursoConteudo = obterResourceService.obterRecursoConteudo(resource.getId());
+            var recursoConteudo = obterResourceService.obterRecursoCampos(resource.getId());
             resource.setCampos(recursoConteudo.getFields());
         });
 
