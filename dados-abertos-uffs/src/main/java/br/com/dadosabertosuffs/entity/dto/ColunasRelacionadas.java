@@ -10,6 +10,6 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 public class ColunasRelacionadas {
-    String nomeDataset;
-    String nomeCampo;
+   private String nomeDataset;
+   private String nomeCampo;
 }

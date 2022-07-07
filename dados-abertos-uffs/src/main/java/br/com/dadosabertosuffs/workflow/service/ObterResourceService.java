@@ -6,6 +6,6 @@ public interface ObterResourceService {
         
     public ResourceResponseResult obterRecursoCampos(String idRecurso);
      
-    public ResourceResponseResult obterRecursoConteudo(String idRecurso);
+    public String obterRecursoConteudo(String idRecurso);
 
 }

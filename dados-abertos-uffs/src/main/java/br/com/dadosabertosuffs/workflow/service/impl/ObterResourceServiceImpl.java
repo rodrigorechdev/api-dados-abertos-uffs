@@ -34,12 +34,10 @@ public class ObterResourceServiceImpl extends ServiceUtils implements ObterResou
     }
 
     @Override
-    public ResourceResponseResult obterRecursoConteudo(String idRecurso) {
+    public String obterRecursoConteudo(String idRecurso) {
         try {
             var httpRequest = criarRequest(obterUriObterDatastoreConteudo(idRecurso));
-            var responseBody = super.obterResponseBody(httpRequest);
-        
-            return new Gson().fromJson(responseBody, ResourceResponse.class).getResult();
+            return super.obterResponseBody(httpRequest);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             throw new RuntimeException();
