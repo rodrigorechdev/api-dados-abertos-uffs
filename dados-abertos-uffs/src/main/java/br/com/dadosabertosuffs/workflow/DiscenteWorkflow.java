@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 
 import br.com.dadosabertosuffs.workflow.activity.ObterCamposRecursoActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterColunasRelacionadasActivity;
+import br.com.dadosabertosuffs.workflow.activity.ObterConteudoRecursoActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterIdRecursoPorDatasetActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterNomesDatasetsActivity;
 import lombok.RequiredArgsConstructor;
-
+//TODO alterar @Service de tds as classes pra component?
 @Service
 @RequiredArgsConstructor
 public class DiscenteWorkflow {
@@ -28,15 +29,21 @@ public class DiscenteWorkflow {
     @Autowired
     private final ObterColunasRelacionadasActivity obterColunasRelacionadas;
     
+    @Autowired
+    private final ObterConteudoRecursoActivity obterConteudoRecursoActivity;
+    
     public List<String> obterNomesDatasets() throws IOException, InterruptedException {
         return obterNomesDatasets.execute();
     }
 
-    public List<String> obterDatasetConteudo(String dataset) throws IOException, InterruptedException {
+    public String obterDatasetConteudo(String datasetNome) throws IOException, InterruptedException {
         var nomesDatasets = obterNomesDatasets.execute();
         var hashRecursosPorDataset = obterIdRecursosPorDataset.execute(nomesDatasets);
         hashRecursosPorDataset = obterCamposRecurso.execute(hashRecursosPorDataset);
-        var colunasRelacionadas = obterColunasRelacionadas.execute(hashRecursosPorDataset);
-        return null;
+
+        var hashRelacionamentos = obterColunasRelacionadas.execute(hashRecursosPorDataset);
+        var conteudoRecurso = obterConteudoRecursoActivity.execute(datasetNome, hashRecursosPorDataset, hashRelacionamentos);
+        
+        return conteudoRecurso;
     }
 }
