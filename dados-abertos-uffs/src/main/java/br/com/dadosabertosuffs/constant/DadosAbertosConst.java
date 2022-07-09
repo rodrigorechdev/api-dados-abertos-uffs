@@ -7,6 +7,7 @@ public class DadosAbertosConst {
     public final static String PATH_RECURSO_LISTA = "package_list";
     public final static String PATH_DATASTORE_SEARCH = "datastore_search";
 
+    public final static String QUERY_FORMATO_CONTEUDO = "records_format";
     public final static String QUERY_RESOURCE_ID = "resource_id";
     public final static String QUERY_DATASET_ID = "id";
     public final static String QUERY_PAGINACAO = "limit";
