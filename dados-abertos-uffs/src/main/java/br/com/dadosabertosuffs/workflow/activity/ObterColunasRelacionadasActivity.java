@@ -31,19 +31,19 @@ public class ObterColunasRelacionadasActivity {
                                 (campo1) -> {
                                     resource2.getCampos().forEach(
                                         (campo2) -> {
-                                            //Não dá pra saber se um campo realmente serve como foreign key pq existem nomes com campos iguals que não são fk, por exemplo "data" e podem haver outros. O código n pode identificar isso dinamicamente
-                                            //Não dá pra saber pq mesmo sabendo que o campo é fk, se outras X tabelas tbm tiverem esse campo, não sabemos qual é a tabela que tem esse campo orinalmente. Nos conectariamos com todas as outras.
                                             if(!campo2.getId().equals("_id") && campo1.getId().equals(campo2.getId())) {  
-                                                var novaColunaRelacionada = ColunasRelacionadas.builder()
-                                                                                .nomeDataset(nomeDataset2)
-                                                                                .nomeCampo(campo2.getId())
-                                                                                .build();
-                                                if(hashColunasRelacionadas.get(nomeDataset) == null) {
-                                                    var novaLista = new ArrayList<ColunasRelacionadas>();
-                                                    novaLista.add(novaColunaRelacionada);
-                                                    hashColunasRelacionadas.put(nomeDataset, novaLista);
-                                                } else {
-                                                    hashColunasRelacionadas.get(nomeDataset).add(novaColunaRelacionada);
+                                                if(obterCamposForeignKey().contains(campo2.getId())) {
+                                                    var novaColunaRelacionada = ColunasRelacionadas.builder()
+                                                                                    .nomeDataset(nomeDataset2)
+                                                                                    .nomeCampo(campo2.getId())
+                                                                                    .build();
+                                                    if(hashColunasRelacionadas.get(nomeDataset) == null) {
+                                                        var novaLista = new ArrayList<ColunasRelacionadas>();
+                                                        novaLista.add(novaColunaRelacionada);
+                                                        hashColunasRelacionadas.put(nomeDataset, novaLista);
+                                                    } else {
+                                                        hashColunasRelacionadas.get(nomeDataset).add(novaColunaRelacionada);
+                                                    }
                                                 }
                                             }
                                         }
@@ -58,4 +58,19 @@ public class ObterColunasRelacionadasActivity {
 
         return hashColunasRelacionadas;
     }
+
+    public List<String> obterCamposForeignKey() {
+        return List.of(
+                "id_turma",
+                "cod_ccr",
+                "cod_uffs",
+                "cod_uffs_curso_turma",
+                "lista_docente_ch",
+                "nome_curso",
+                "cpf",
+                "id_curso",
+                "coordenador"
+        );
+    }
+
 }
