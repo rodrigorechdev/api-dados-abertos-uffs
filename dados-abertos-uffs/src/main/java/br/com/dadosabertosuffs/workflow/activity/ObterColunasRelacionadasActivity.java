@@ -19,7 +19,7 @@ public class ObterColunasRelacionadasActivity {
      * os campos com mesmo nome.
      * @param hashRecursosPorDataset
      */
-    public HashMap<String, List<ColunasRelacionadas>> execute(HashMap<String, Resource> hashRecursosPorDataset) {
+    public HashMap<String, List<ColunasRelacionadas>> execute(HashMap<String, Resource> hashRecursosPorDataset, List<String> relacionamentos) {
         HashMap<String, List<ColunasRelacionadas>> hashColunasRelacionadas = new HashMap<>();
         
         hashRecursosPorDataset.forEach(
@@ -32,7 +32,7 @@ public class ObterColunasRelacionadasActivity {
                                     resource2.getCampos().forEach(
                                         (campo2) -> {
                                             if(!campo2.getId().equals("_id") && campo1.getId().equals(campo2.getId())) {  
-                                                if(obterCamposForeignKey().contains(campo2.getId())) {
+                                                if(relacionamentos.contains(campo2.getId())) {
                                                     var novaColunaRelacionada = ColunasRelacionadas.builder()
                                                                                     .nomeDataset(nomeDataset2)
                                                                                     .nomeCampo(campo2.getId())
@@ -57,20 +57,6 @@ public class ObterColunasRelacionadasActivity {
         );
 
         return hashColunasRelacionadas;
-    }
-
-    public List<String> obterCamposForeignKey() {
-        return List.of(
-                "id_turma",
-                "cod_ccr",
-                "cod_uffs",
-                "cod_uffs_curso_turma",
-                "lista_docente_ch",
-                "nome_curso",
-                "cpf",
-                "id_curso",
-                "coordenador"
-        );
     }
 
 }

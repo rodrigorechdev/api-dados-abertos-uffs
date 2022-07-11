@@ -1,6 +1,7 @@
 package br.com.dadosabertosuffs.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,14 @@ public class DadosAbertosController {
     }
 
     @RequestMapping(value = "/dataset/{datasetNome}/recurso", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> obterRecurso(@PathVariable String datasetNome, @RequestHeader(required = false) String filtros) throws IOException, InterruptedException {
-        var response = discenteWorkflow.obterDatasetConteudo(datasetNome, filtros);
+    public ResponseEntity<String> obterRecurso(@PathVariable String datasetNome, @RequestHeader(required = false) String filtros, @RequestHeader(required = false) String relacionamentos) throws IOException, InterruptedException {
+        var response = discenteWorkflow.obterDatasetConteudo(datasetNome, filtros, formatarRelacionamentos(relacionamentos));
         return new ResponseEntity<String>(response, HttpStatus.OK);
+    }
+
+    public List<String> formatarRelacionamentos(String relacionamentos) {
+        return Arrays.asList(
+            relacionamentos.split(",")
+        );
     }
 }
