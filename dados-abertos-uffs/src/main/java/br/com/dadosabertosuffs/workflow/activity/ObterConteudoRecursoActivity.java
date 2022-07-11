@@ -28,10 +28,14 @@ public class ObterConteudoRecursoActivity {
 
     @Autowired
     private final ObterResourceService obterResourceService;
-    
-    public String execute(String nomeDatasetPrincipal, HashMap<String, Resource> hashRecursosPorDataset, HashMap<String, List<ColunasRelacionadas>> relacionamentosDatasets) throws JsonProcessingException {
+    /**
+     * TODO transformar hashRecursosPorDataset.get(nomeDatasetPrincipal).getId() em um objeto
+     */
+    public String execute(String nomeDatasetPrincipal, HashMap<String, Resource> hashRecursosPorDataset, HashMap<String, List<ColunasRelacionadas>> relacionamentosDatasets, String filtros) throws JsonProcessingException {
         var idDatasetPrincipal = hashRecursosPorDataset.get(nomeDatasetPrincipal).getId();
-        String datasetPrincipalConteudoString = obterResourceService.obterRecursoConteudo(idDatasetPrincipal);
+        String datasetPrincipalConteudoString = filtros == null ?
+            obterResourceService.obterRecursoConteudo(idDatasetPrincipal) :
+            obterResourceService.obterRecursoConteudo(idDatasetPrincipal, filtros);
         
         List<HashMap<String, String>> datasetPrincipalConteudoHash = obtemHashDeCampoValor(new Gson().fromJson(datasetPrincipalConteudoString, ResourceResponse.class).getResult());
 

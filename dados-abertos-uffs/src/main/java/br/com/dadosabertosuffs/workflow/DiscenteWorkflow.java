@@ -36,13 +36,13 @@ public class DiscenteWorkflow {
         return obterNomesDatasets.execute();
     }
 
-    public String obterDatasetConteudo(String datasetNome) throws IOException, InterruptedException {
+    public String obterDatasetConteudo(String datasetNome, String filtros) throws IOException, InterruptedException {
         var nomesDatasets = obterNomesDatasets.execute();
         var hashRecursosPorDataset = obterIdRecursosPorDataset.execute(nomesDatasets);
         hashRecursosPorDataset = obterCamposRecurso.execute(hashRecursosPorDataset);
 
         var hashRelacionamentos = obterColunasRelacionadas.execute(hashRecursosPorDataset);
-        var conteudoRecurso = obterConteudoRecursoActivity.execute(datasetNome, hashRecursosPorDataset, hashRelacionamentos);
+        var conteudoRecurso = obterConteudoRecursoActivity.execute(datasetNome, hashRecursosPorDataset, hashRelacionamentos, filtros);
         
         return conteudoRecurso;
     }

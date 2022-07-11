@@ -56,6 +56,17 @@ public class ObterResourceServiceImpl extends ServiceUtils implements ObterResou
         }
     }
 
+    @Override
+    public String obterRecursoConteudo(String idRecurso, String filtroJson) {
+        try {
+            var httpRequest = criarRequest(obterUriObterDatastoreConteudo(idRecurso, filtroJson));
+            return super.obterResponseBody(httpRequest);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
+
     private URI obterUriObterRecursoCampos(String idResource) {
         return new DefaultUriBuilderFactory(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
         .builder() 
@@ -81,6 +92,16 @@ public class ObterResourceServiceImpl extends ServiceUtils implements ObterResou
         .queryParam(DadosAbertosConst.QUERY_FORMATO_CONTEUDO, "lists")
         .queryParam(DadosAbertosConst.QUERY_RESOURCE_ID, idResource)
         .queryParam(DadosAbertosConst.QUERY_FILTRO, "{\"" + filtroChave + "\":\"" + filtroValor + "\"}")
+        .build()
+        .toUri();
+    }
+
+    private URI obterUriObterDatastoreConteudo(String idResource, String filtroJson) {    
+        return UriComponentsBuilder.fromUriString(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
+        .path(DadosAbertosConst.PATH_DATASTORE_SEARCH)
+        .queryParam(DadosAbertosConst.QUERY_FORMATO_CONTEUDO, "lists")
+        .queryParam(DadosAbertosConst.QUERY_RESOURCE_ID, idResource)
+        .queryParam(DadosAbertosConst.QUERY_FILTRO, filtroJson)
         .build()
         .toUri();
     }

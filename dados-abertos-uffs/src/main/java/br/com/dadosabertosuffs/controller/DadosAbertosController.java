@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,8 +34,8 @@ public class DadosAbertosController {
     }
 
     @RequestMapping(value = "/dataset/{datasetNome}/recurso", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> obterRecurso(@PathVariable String datasetNome) throws IOException, InterruptedException {
-        var response = discenteWorkflow.obterDatasetConteudo(datasetNome);
+    public ResponseEntity<String> obterRecurso(@PathVariable String datasetNome, @RequestHeader(required = false) String filtros) throws IOException, InterruptedException {
+        var response = discenteWorkflow.obterDatasetConteudo(datasetNome, filtros);
         return new ResponseEntity<String>(response, HttpStatus.OK);
     }
 }

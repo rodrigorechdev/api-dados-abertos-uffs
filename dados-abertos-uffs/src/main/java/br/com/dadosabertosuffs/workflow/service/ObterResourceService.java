@@ -10,4 +10,6 @@ public interface ObterResourceService {
 
     public String obterRecursoConteudo(String idRecurso, String filtroChave, String filtroValor);
 
+    public String obterRecursoConteudo(String idRecurso, String filtroEmJson);
+
 }
