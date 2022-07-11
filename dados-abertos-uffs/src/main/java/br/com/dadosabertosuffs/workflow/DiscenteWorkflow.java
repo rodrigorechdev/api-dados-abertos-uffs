@@ -12,7 +12,7 @@ import br.com.dadosabertosuffs.workflow.activity.ObterConteudoRecursoActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterIdRecursoPorDatasetActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterNomesDatasetsActivity;
 import lombok.RequiredArgsConstructor;
-//TODO alterar @Service de tds as classes pra component?
+
 @Service
 @RequiredArgsConstructor
 public class DiscenteWorkflow {
