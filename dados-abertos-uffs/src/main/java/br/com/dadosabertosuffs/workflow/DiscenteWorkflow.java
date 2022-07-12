@@ -1,14 +1,18 @@
 package br.com.dadosabertosuffs.workflow;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.dadosabertosuffs.entity.dto.ResourceEstrutura;
+import br.com.dadosabertosuffs.entity.dto.ResourceComRelacionamentoResponse;
 import br.com.dadosabertosuffs.workflow.activity.ObterCamposRecursoActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterColunasRelacionadasActivity;
-import br.com.dadosabertosuffs.workflow.activity.ObterConteudoRecursoActivity;
+import br.com.dadosabertosuffs.workflow.activity.ObterConteudoRecursoPrincipalActivity;
+import br.com.dadosabertosuffs.workflow.activity.ObterConteudoRecursoRelacionadoActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterIdRecursoPorDatasetActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterNomesDatasetsActivity;
 import lombok.RequiredArgsConstructor;
@@ -30,20 +34,35 @@ public class DiscenteWorkflow {
     private final ObterColunasRelacionadasActivity obterColunasRelacionadas;
     
     @Autowired
-    private final ObterConteudoRecursoActivity obterConteudoRecursoActivity;
+    private final ObterConteudoRecursoPrincipalActivity obterConteudoRecursoPrincipalActivity;
+
+    @Autowired
+    private final ObterConteudoRecursoRelacionadoActivity obterConteudoRecursoRelacionadoActivity;
     
     public List<String> obterNomesDatasets() throws IOException, InterruptedException {
         return obterNomesDatasets.execute();
     }
 
-    public String obterDatasetConteudo(String datasetNome, String filtros, List<String> relacionamentos) throws IOException, InterruptedException {
-        var nomesDatasets = obterNomesDatasets.execute();
-        var hashRecursosPorDataset = obterIdRecursosPorDataset.execute(nomesDatasets);
-        hashRecursosPorDataset = obterCamposRecurso.execute(hashRecursosPorDataset);
+    public List<ResourceComRelacionamentoResponse> obterDatasetConteudo(String datasetNome, String filtros, List<String> relacionamentos) throws IOException, InterruptedException {
+        var hashRecursoEstrutura = obterRecursoEstrutura(relacionamentos);
 
-        var hashRelacionamentos = obterColunasRelacionadas.execute(hashRecursosPorDataset, relacionamentos);
-        var conteudoRecurso = obterConteudoRecursoActivity.execute(datasetNome, hashRecursosPorDataset, hashRelacionamentos, filtros);
+        var conteudoDatasetPrincipalSemRelacionamento = obterConteudoRecursoPrincipalActivity.execute(datasetNome, hashRecursoEstrutura, filtros);
+        var conteudoDatasetPrincipalComRelacionamento = obterConteudoRecursoRelacionadoActivity.execute(conteudoDatasetPrincipalSemRelacionamento, datasetNome, hashRecursoEstrutura);
         
-        return conteudoRecurso;
+        return conteudoDatasetPrincipalComRelacionamento;
+    }
+
+    /**
+     * Obtém hash de recursoEstrutura. A chave do Hash é o nome do dataset, o campo é a estrutura
+     * que consiste no id, nome, campos e datasets relacionados.
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    private HashMap<String, ResourceEstrutura> obterRecursoEstrutura(List<String> relacionamentos) throws IOException, InterruptedException {
+        var nomesDatasets = obterNomesDatasets.execute();
+        var hashRecursoEstruturaPorDataset = obterIdRecursosPorDataset.execute(nomesDatasets);
+        obterCamposRecurso.execute(hashRecursoEstruturaPorDataset);
+        obterColunasRelacionadas.execute(hashRecursoEstruturaPorDataset, relacionamentos);
+        return hashRecursoEstruturaPorDataset;
     }
 }

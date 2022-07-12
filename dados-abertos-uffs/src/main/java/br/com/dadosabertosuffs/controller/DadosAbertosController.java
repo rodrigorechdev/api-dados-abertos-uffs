@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
 import br.com.dadosabertosuffs.workflow.DiscenteWorkflow;
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +38,10 @@ public class DadosAbertosController {
 
     @RequestMapping(value = "/dataset/{datasetNome}/recurso", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> obterRecurso(@PathVariable String datasetNome, @RequestHeader(required = false) String filtros, @RequestHeader(required = false) String relacionamentos) throws IOException, InterruptedException {
-        var response = discenteWorkflow.obterDatasetConteudo(datasetNome, filtros, formatarRelacionamentos(relacionamentos));
+        var listRelacionamentos = (relacionamentos == null) ? null : formatarRelacionamentos(relacionamentos);
+        var conteudoDatasetPrincipalComRelacionamento = discenteWorkflow.obterDatasetConteudo(datasetNome, filtros, listRelacionamentos);
+        var response = new Gson().toJson(conteudoDatasetPrincipalComRelacionamento);
+
         return new ResponseEntity<String>(response, HttpStatus.OK);
     }
 

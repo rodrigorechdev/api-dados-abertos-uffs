@@ -1,6 +1,6 @@
 package br.com.dadosabertosuffs.entity.httpresponse;
 
-import br.com.dadosabertosuffs.entity.dto.Resource;
+import br.com.dadosabertosuffs.entity.dto.ResourceEstrutura;
 import lombok.Getter;
 
 @Getter
@@ -10,8 +10,8 @@ public class DatasetShowResponseResultResources {
 
     private String name;
 
-    public Resource toResource() {
-        return Resource.builder()
+    public ResourceEstrutura toResourceEstrutura() {
+        return ResourceEstrutura.builder()
             .id(id)
             .nome(name)
             .build();

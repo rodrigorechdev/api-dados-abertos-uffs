@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.dadosabertosuffs.entity.dto.Resource;
+import br.com.dadosabertosuffs.entity.dto.ResourceEstrutura;
 import br.com.dadosabertosuffs.entity.httpresponse.DatasetShowResponseResultResources;
 import br.com.dadosabertosuffs.workflow.service.ObterDatasetService;
 import lombok.RequiredArgsConstructor;
@@ -20,21 +20,18 @@ public class ObterIdRecursoPorDatasetActivity {
     private final ObterDatasetService obterDatasetService;
     
     /**
-     * Retorna hash onde a chave é o nome do dataset e o valor é um objeto com id e nome do recurso.
-     * O método consulta a lista de recursos de cada dataset e diferencia o recurso com os dados
-     * do recurso Dicionário considerando que o recurso de dicionário sempre terá a palavra
-     * "dicionario" no nome do recurso.
+     * Obtém id e nome do recurso pelo nome do dataset. Desconsidera o recurso "dicionário"
      * @param nomesDatasets
      * @return 
      * @throws IOException
      * @throws InterruptedException
      */
-    public HashMap<String, Resource> execute(List<String> nomesDatasets) throws IOException, InterruptedException {
-        HashMap<String, Resource> hashRecurso = new HashMap<>();
+    public HashMap<String, ResourceEstrutura> execute(List<String> nomesDatasets) throws IOException, InterruptedException {
+        HashMap<String, ResourceEstrutura> hashRecurso = new HashMap<>();
         for(String nomeDataset : nomesDatasets) {
             var listRecursosDeDataset = obterDatasetService.obterRecursosDeDataset(nomeDataset);
-            var recurso = removeDicionario(listRecursosDeDataset).toResource();
-            hashRecurso.put(nomeDataset, recurso);
+            var recursoEstrutura = removeDicionario(listRecursosDeDataset).toResourceEstrutura();
+            hashRecurso.put(nomeDataset, recursoEstrutura);
         }
 
         return hashRecurso;

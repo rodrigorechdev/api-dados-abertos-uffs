@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.dadosabertosuffs.entity.dto.Resource;
+import br.com.dadosabertosuffs.entity.dto.ResourceEstrutura;
 import br.com.dadosabertosuffs.workflow.service.ObterResourceService;
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +17,7 @@ public class ObterCamposRecursoActivity {
     @Autowired
     private final ObterResourceService obterResourceService;
 
-    public HashMap<String, Resource> execute(HashMap<String, Resource> hashIdRecursosPorDataset) throws IOException, InterruptedException {
+    public HashMap<String, ResourceEstrutura> execute(HashMap<String, ResourceEstrutura> hashIdRecursosPorDataset) throws IOException, InterruptedException {
         
         hashIdRecursosPorDataset.forEach((nomeDataset, resource) -> {
             var recursoConteudo = obterResourceService.obterRecursoCampos(resource.getId());

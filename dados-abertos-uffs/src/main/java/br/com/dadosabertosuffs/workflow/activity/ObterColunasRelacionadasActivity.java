@@ -7,7 +7,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import br.com.dadosabertosuffs.entity.dto.ColunasRelacionadas;
-import br.com.dadosabertosuffs.entity.dto.Resource;
+import br.com.dadosabertosuffs.entity.dto.ResourceEstrutura;
+import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponseResultField;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -19,32 +20,15 @@ public class ObterColunasRelacionadasActivity {
      * os campos com mesmo nome.
      * @param hashRecursosPorDataset
      */
-    public HashMap<String, List<ColunasRelacionadas>> execute(HashMap<String, Resource> hashRecursosPorDataset, List<String> relacionamentos) {
-        HashMap<String, List<ColunasRelacionadas>> hashColunasRelacionadas = new HashMap<>();
-        
-        hashRecursosPorDataset.forEach(
-            (nomeDataset, resource1) -> {
-                hashRecursosPorDataset.forEach(
-                    (nomeDataset2, resource2) -> {
-                        if(!nomeDataset.equals(nomeDataset2)) {
-                            resource1.getCampos().forEach(
-                                (campo1) -> {
-                                    resource2.getCampos().forEach(
-                                        (campo2) -> {
-                                            if(!campo2.getId().equals("_id") && campo1.getId().equals(campo2.getId())) {  
-                                                if(relacionamentos.contains(campo2.getId())) {
-                                                    var novaColunaRelacionada = ColunasRelacionadas.builder()
-                                                                                    .nomeDataset(nomeDataset2)
-                                                                                    .nomeCampo(campo2.getId())
-                                                                                    .build();
-                                                    if(hashColunasRelacionadas.get(nomeDataset) == null) {
-                                                        var novaLista = new ArrayList<ColunasRelacionadas>();
-                                                        novaLista.add(novaColunaRelacionada);
-                                                        hashColunasRelacionadas.put(nomeDataset, novaLista);
-                                                    } else {
-                                                        hashColunasRelacionadas.get(nomeDataset).add(novaColunaRelacionada);
-                                                    }
-                                                }
+    public void execute(HashMap<String, ResourceEstrutura> hashRecursosPorDataset, List<String> relacionamentos) {        
+        hashRecursosPorDataset.forEach((nomeDataset, resource1) -> {//varre dataset1
+                hashRecursosPorDataset.forEach((nomeDataset2, resource2) -> {//varre dataset2
+                        if(!nomeDataset.equals(nomeDataset2)) {//desconsidera datasets iguais
+                            resource1.getCampos().forEach((campo1) -> {//varre campos do dataset1
+                                    resource2.getCampos().forEach((campo2) -> {//varre campos do dataset2
+                                            if(recursosSaoRelacionados(campo1, campo2, relacionamentos)) {      
+                                                var novaColunaRelacionada = new ColunasRelacionadas(nomeDataset, campo2.getId());
+                                                addRelacionamentoNoHash(nomeDataset, hashRecursosPorDataset, novaColunaRelacionada);
                                             }
                                         }
                                     );
@@ -55,8 +39,23 @@ public class ObterColunasRelacionadasActivity {
                 );
             }
         );
-
-        return hashColunasRelacionadas;
     }
 
+    private boolean recursosSaoRelacionados(ResourceResponseResultField campo1, ResourceResponseResultField campo2, List<String> relacionamentos) {
+        var nomeCampo1 = campo1.getId();
+        var nomeCampo2 = campo2.getId();
+        return (relacionamentos == null || relacionamentos.contains(campo2.getId())) &&
+            !nomeCampo1.equals("_id") &&
+            nomeCampo1.equals(nomeCampo2);
+    }
+
+    private void addRelacionamentoNoHash(String nomeDataset, HashMap<String, ResourceEstrutura> hashRecursosPorDataset, ColunasRelacionadas novaColunaRelacionada) {
+        if(hashRecursosPorDataset.get(nomeDataset).getColunasRelacionadas() == null) {
+            List<ColunasRelacionadas> novaLista = new ArrayList<ColunasRelacionadas>();
+            novaLista.add(novaColunaRelacionada);
+            hashRecursosPorDataset.get(nomeDataset).setColunasRelacionadas(novaLista);
+        } else {
+            hashRecursosPorDataset.get(nomeDataset).getColunasRelacionadas().add(novaColunaRelacionada);
+        }
+    }
 }

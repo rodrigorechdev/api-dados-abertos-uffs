@@ -10,8 +10,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Resource {
+public class ResourceEstrutura {
     private String id;
     private String nome;
     private List<ResourceResponseResultField> campos;
+    private List<ColunasRelacionadas> colunasRelacionadas;
 }

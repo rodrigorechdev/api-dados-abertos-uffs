@@ -17,5 +17,4 @@ public class ResourceComRelacionamentoResponse {
         this.camposOriginais = camposOriginais;
         this.camposRelacionados = Mapper.listResourceRelacionadoToJsonArray(camposRelacionados);
     }
-
 }
