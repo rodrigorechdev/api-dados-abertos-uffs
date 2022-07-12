@@ -7,8 +7,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.dadosabertosuffs.entity.dto.ResourceEstrutura;
+import br.com.dadosabertosuffs.cache.Cache;
 import br.com.dadosabertosuffs.entity.dto.ResourceComRelacionamentoResponse;
+import br.com.dadosabertosuffs.entity.dto.ResourceEstrutura;
 import br.com.dadosabertosuffs.workflow.activity.ObterCamposRecursoActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterColunasRelacionadasActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterConteudoRecursoPrincipalActivity;
@@ -39,6 +40,9 @@ public class DiscenteWorkflow {
     @Autowired
     private final ObterConteudoRecursoRelacionadoActivity obterConteudoRecursoRelacionadoActivity;
     
+    @Autowired
+    private final Cache cache;
+    
     public List<String> obterNomesDatasets() throws IOException, InterruptedException {
         return obterNomesDatasets.execute();
     }
@@ -59,10 +63,18 @@ public class DiscenteWorkflow {
      * @throws IOException
      */
     private HashMap<String, ResourceEstrutura> obterRecursoEstrutura(List<String> relacionamentos) throws IOException, InterruptedException {
-        var nomesDatasets = obterNomesDatasets.execute();
-        var hashRecursoEstruturaPorDataset = obterIdRecursosPorDataset.execute(nomesDatasets);
-        obterCamposRecurso.execute(hashRecursoEstruturaPorDataset);
-        obterColunasRelacionadas.execute(hashRecursoEstruturaPorDataset, relacionamentos);
-        return hashRecursoEstruturaPorDataset;
+        HashMap<String, ResourceEstrutura> hashRecursoEstruturaPorDataset;
+        if(cache.atualizacaoNecessaria()) {
+            var nomesDatasets = obterNomesDatasets.execute();
+            hashRecursoEstruturaPorDataset = obterIdRecursosPorDataset.execute(nomesDatasets);
+            obterCamposRecurso.execute(hashRecursoEstruturaPorDataset);
+
+            cache.atualizarCache(hashRecursoEstruturaPorDataset);
+        } else {
+            hashRecursoEstruturaPorDataset = cache.getHashRecursoEstruturaPorDataset();
+        }
+
+        
+        return obterColunasRelacionadas.execute(hashRecursoEstruturaPorDataset, relacionamentos);
     }
 }
