@@ -36,10 +36,10 @@ public class DadosAbertosController {
         return new ResponseEntity<List<String>>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/dataset/{datasetNome}/recurso", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> obterRecurso(@PathVariable String datasetNome, @RequestHeader(required = false) String filtros, @RequestHeader(required = false) String relacionamentos) throws IOException, InterruptedException {
+    @RequestMapping(value = "/dataset/{datasetName}/resource", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> obterRecurso(@PathVariable String datasetName, @RequestHeader(required = false) String filtros, @RequestHeader(required = false) String relacionamentos) throws IOException, InterruptedException {
         var listRelacionamentos = (relacionamentos == null) ? null : formatarRelacionamentos(relacionamentos);
-        var conteudoDatasetPrincipalComRelacionamento = discenteWorkflow.obterDatasetConteudo(datasetNome, filtros, listRelacionamentos);
+        var conteudoDatasetPrincipalComRelacionamento = discenteWorkflow.obterDatasetConteudo(datasetName, filtros, listRelacionamentos);
         var response = new Gson().toJson(conteudoDatasetPrincipalComRelacionamento);
 
         return new ResponseEntity<String>(response, HttpStatus.OK);
