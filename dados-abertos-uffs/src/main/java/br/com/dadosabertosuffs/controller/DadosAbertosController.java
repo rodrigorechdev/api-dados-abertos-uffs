@@ -47,7 +47,7 @@ public class DadosAbertosController {
 
     public List<String> formatarRelacionamentos(String relacionamentos) {
         return Arrays.asList(
-            relacionamentos.split(",")
+            relacionamentos.trim().split(",")
         );
     }
 }

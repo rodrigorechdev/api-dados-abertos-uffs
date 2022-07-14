@@ -32,9 +32,6 @@ public class ObterConteudoRecursoRelacionadoActivity {
         return obterConteudoRecursosRelacionados(datasetPrincipalConteudoHash, datasetPrincipalRelacionamentos, hashRecursosEstrutura);
     }
 
-    /**
-     * Para cada registro, consulta cada um dos relacionamentos.
-     */
     private List<ResourceComRelacionamentoResponse> obterConteudoRecursosRelacionados(List<HashMap<String, String>> datasetPrincipalConteudoHash, List<ColunasRelacionadas> datasetPrincipalRelacionamentos, HashMap<String, ResourceEstrutura> hashRecursosPorDataset) {
         return datasetPrincipalConteudoHash.stream().map((registroConteudoHash) -> {
             List<ResourceRelacionado> relacionamentosConteudo = datasetPrincipalRelacionamentos.stream()

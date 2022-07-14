@@ -8,7 +8,8 @@ import lombok.Getter;
 @Getter
 @EqualsAndHashCode
 public class ResourceResponse {
-
+    private String help;
+    private boolean success;
     private ResourceResponseResult result;
     
 }

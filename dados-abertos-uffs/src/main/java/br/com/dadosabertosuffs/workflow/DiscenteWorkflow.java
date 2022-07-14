@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.dadosabertosuffs.cache.Cache;
-import br.com.dadosabertosuffs.entity.dto.ResourceComRelacionamentoResponse;
 import br.com.dadosabertosuffs.entity.dto.ResourceEstrutura;
+import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponse;
+import br.com.dadosabertosuffs.workflow.activity.CriarObterDatasetConteudoResponse;
+import br.com.dadosabertosuffs.workflow.activity.JsonArrayToListaDeRegistrosActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterCamposRecursoActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterColunasRelacionadasActivity;
 import br.com.dadosabertosuffs.workflow.activity.ObterConteudoRecursoPrincipalActivity;
@@ -35,10 +37,16 @@ public class DiscenteWorkflow {
     private final ObterColunasRelacionadasActivity obterColunasRelacionadas;
     
     @Autowired
-    private final ObterConteudoRecursoPrincipalActivity obterConteudoRecursoPrincipalActivity;
+    private final JsonArrayToListaDeRegistrosActivity jsonArrayToListaDeRegistrosActivity;
 
     @Autowired
+    private final ObterConteudoRecursoPrincipalActivity obterConteudoRecursoPrincipalActivity;
+    
+    @Autowired
     private final ObterConteudoRecursoRelacionadoActivity obterConteudoRecursoRelacionadoActivity;
+
+    @Autowired
+    private final CriarObterDatasetConteudoResponse criarObterDatasetConteudoResponse;
     
     @Autowired
     private final Cache cache;
@@ -47,13 +55,14 @@ public class DiscenteWorkflow {
         return obterNomesDatasets.execute();
     }
 
-    public List<ResourceComRelacionamentoResponse> obterDatasetConteudo(String datasetNome, String filtros, List<String> relacionamentos) throws IOException, InterruptedException {
+    public ResourceResponse obterDatasetConteudo(String datasetNome, String filtros, List<String> relacionamentos) throws IOException, InterruptedException {
         var hashRecursoEstrutura = obterRecursoEstrutura(relacionamentos);
 
-        var conteudoDatasetPrincipalSemRelacionamento = obterConteudoRecursoPrincipalActivity.execute(datasetNome, hashRecursoEstrutura, filtros);
+        ResourceResponse datasetPrincipalConteudo = obterConteudoRecursoPrincipalActivity.execute(datasetNome, hashRecursoEstrutura, filtros);
+        var conteudoDatasetPrincipalSemRelacionamento = jsonArrayToListaDeRegistrosActivity.execute(datasetPrincipalConteudo);
         var conteudoDatasetPrincipalComRelacionamento = obterConteudoRecursoRelacionadoActivity.execute(conteudoDatasetPrincipalSemRelacionamento, datasetNome, hashRecursoEstrutura);
-        
-        return conteudoDatasetPrincipalComRelacionamento;
+
+        return criarObterDatasetConteudoResponse.execute(datasetPrincipalConteudo, conteudoDatasetPrincipalComRelacionamento);
     }
 
     /**
@@ -74,7 +83,6 @@ public class DiscenteWorkflow {
             hashRecursoEstruturaPorDataset = cache.getHashRecursoEstruturaPorDataset();
         }
 
-        
         return obterColunasRelacionadas.execute(hashRecursoEstruturaPorDataset, relacionamentos);
     }
 }
