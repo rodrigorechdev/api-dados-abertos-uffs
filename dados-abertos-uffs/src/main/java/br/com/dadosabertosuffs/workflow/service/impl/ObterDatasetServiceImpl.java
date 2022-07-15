@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.google.gson.Gson;
 
@@ -45,17 +45,17 @@ public class ObterDatasetServiceImpl extends ServiceUtils implements ObterDatase
     }
 
     private URI obterUriNomesDatasets() {
-        return new DefaultUriBuilderFactory(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
-            .builder()
-            .path(DadosAbertosConst.PATH_RECURSO_LISTA)
-            .build();
+        return UriComponentsBuilder.fromUriString(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
+        .path(DadosAbertosConst.PATH_RECURSO_LISTA)
+        .build()
+        .toUri();
     }
     
     private URI obterUriObterListaRecurso(String nomeDataset) {
-        return new DefaultUriBuilderFactory(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
-        .builder() 
+        return UriComponentsBuilder.fromUriString(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
         .path(DadosAbertosConst.PATH_RECURSO)
         .queryParam(DadosAbertosConst.QUERY_DATASET_ID, nomeDataset)
-        .build();
+        .build()
+        .toUri();
     }
 }

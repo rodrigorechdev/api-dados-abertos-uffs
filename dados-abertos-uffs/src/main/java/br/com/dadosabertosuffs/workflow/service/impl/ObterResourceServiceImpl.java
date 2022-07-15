@@ -5,7 +5,6 @@ import java.net.URI;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.google.gson.Gson;
@@ -68,22 +67,22 @@ public class ObterResourceServiceImpl extends ServiceUtils implements ObterResou
     }
 
     private URI obterUriObterRecursoCampos(String idResource) {
-        return new DefaultUriBuilderFactory(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
-        .builder() 
+        return UriComponentsBuilder.fromUriString(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
         .path(DadosAbertosConst.PATH_DATASTORE_SEARCH)
         .queryParam(DadosAbertosConst.QUERY_FORMATO_CONTEUDO, "lists")
         .queryParam(DadosAbertosConst.QUERY_RESOURCE_ID, idResource)
         .queryParam(DadosAbertosConst.QUERY_PAGINACAO, 0)
-        .build();
+        .build()
+        .toUri();
     }
         
     private URI obterUriObterDatastoreConteudo(String idResource) {
-        return new DefaultUriBuilderFactory(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
-        .builder() 
+        return UriComponentsBuilder.fromUriString(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
         .path(DadosAbertosConst.PATH_DATASTORE_SEARCH)
         .queryParam(DadosAbertosConst.QUERY_FORMATO_CONTEUDO, "lists")
         .queryParam(DadosAbertosConst.QUERY_RESOURCE_ID, idResource)
-        .build();
+        .build()
+        .toUri();
     }
 
     private URI obterUriObterDatastoreConteudo(String idResource, String filtroChave, String filtroValor) {    
