@@ -1,29 +1,18 @@
 swagger: "2.0"
 info:
-    description: "Dados abertos da UFFS TODO"
+    description: "API de Dados Abertos Relacionados da UFFS"
     version: "1.0.0"
     title: "Transparência UFFS"
-tags:
-  - name: "Graduação"
-    description: "Tudo relacionado a graduação"
-  - name: "Projeto"
-    description: "Projetos de graduação da instítuição"
-  - name: "Pós Graduação"
-    description: "Tudo relacionado a pós graduação"
-  - name: "Auxílio"
-    description: "Auxílio"
-  - name: "Despesa"
-    description: "Despesa"
 schemes:
 - "https"
 paths:
-  /discente:
+  /dataset:
       get:
           tags:
-          - "Graduação"
-          summary: "TODO"
-          description: "TODO"
-          operationId: "discenteGraduacao"
+          - "Dados Abertos"
+          summary: "Obter Nomes dos Datasets"
+          description: "Obtém a lista de nomes dos datasets compartilhados pelo Portal de Dados Abertos da UFFS"
+          operationId: "obterNomesDatasetsDisponiveis"
           consumes:
           - "application/json"
           produces:
@@ -34,775 +23,130 @@ paths:
                   schema:
                       type: "array"
                       items:
-                        $ref: "#/definitions/Discente"
-  /docente:
+                        type: string
+                        example: "matriz_graduacao"
+  /dataset/{datasetName}/resource:
       get:
           tags:
-          - "Graduação"
-          summary: "TODO"
-          description: "TODO"
-          operationId: "docenteGraduacao"
+          - "Dados Abertos"
+          summary: "Obter Conteúdo do Dataset"
+          description: "Obtém os dados do recurso do dataset informado e relacionados"
+          operationId: "obterConteudoDataset"
           consumes:
           - "application/json"
           produces:
           - "application/json"
+          parameters:
+          - name: "datasetName"
+            in: "path"
+            required: true
+            type: "string"
+            description: "Nome do dataset"
+            default: "projetos_cultura"
+          - name: "filtros"
+            in: "header"
+            required: false
+            type: "string"
+            description: "Filtro com nome do campo e valor em formato de objeto Json"
+            default: "{\"_id\":\"335276c4-bbd6-490a-bb4c-e49d7c1d9540\"}"
+          - name: "relacionamentos"
+            in: "header"
+            required: false
+            type: "string"
+            description: "Em formato CSV, específica colunas que serão consideradas como passíveis de formar relacionamento entre datasets"
+            default: "id_turma,cod_ccr,cod_uffs"
           responses:
               "200":
                   description: Consulta realizada com sucesso
                   schema:
-                      type: "array"
-                      items:
-                        $ref: "#/definitions/Docente"
-  /curso:
-      get:
-          tags:
-          - "Graduação"
-          summary: "TODO"
-          description: "TODO"
-          operationId: "cursoGraduacao"
-          consumes:
-          - "application/json"
-          produces:
-          - "application/json"
-          responses:
-              "200":
-                  description: Consulta realizada com sucesso
-                  schema:
-                      type: "array"
-                      items:
-                          $ref: "#/definitions/CursoGraduacao"
-
-  /turma:
-      get:
-          tags:
-          - "Graduação"
-          summary: "TODO"
-          description: "TODO"
-          operationId: "turmaGraduacao"
-          consumes:
-          - "application/json"
-          produces:
-          - "application/json"
-          responses:
-              "200":
-                  description: Consulta realizada com sucesso
-                  schema:
-                      type: "array"
-                      items:
-                          $ref: "#/definitions/TurmaGraduacao"
-
-  /ccr:
-      get:
-          tags:
-          - "Graduação"
-          summary: "TODO"
-          description: "TODO"
-          operationId: "ccrGraduacao"
-          consumes:
-          - "application/json"
-          produces:
-          - "application/json"
-          responses:
-              "200":
-                  description: Consulta realizada com sucesso
-                  schema:
-                      type: "array"
-                      items:
-                          $ref: "#/definitions/CcrMatrizGraduacao"
-  /matriz:
-      get:
-          tags:
-          - "Graduação"
-          summary: "TODO"
-          description: "TODO"
-          operationId: "matrizGraduacao"
-          consumes:
-          - "application/json"
-          produces:
-          - "application/json"
-          responses:
-              "200":
-                  description: Consulta realizada com sucesso
-                  schema:
-                      type: "array"
-                      items:
-                          $ref: "#/definitions/MatrizGraduacao"
-
-  /projeto/cultura:
-      get:
-          tags:
-          - "Projeto"
-          summary: "TODO"
-          description: "TODO"
-          operationId: "projetoCultura"
-          consumes:
-          - "application/json"
-          produces:
-          - "application/json"
-          responses:
-              "200":
-                  description: Consulta realizada com sucesso
-                  schema:
-                      type: "array"
-                      items:
-                          $ref: "#/definitions/ProjetoCultura"
-  /projeto/extensao:
-      get:
-          tags:
-          - "Projeto"
-          summary: "TODO"
-          description: "TODO"
-          operationId: "projetoExtensao"
-          consumes:
-          - "application/json"
-          produces:
-          - "application/json"
-          responses:
-              "200":
-                  description: Consulta realizada com sucesso
-                  schema:
-                      type: "array"
-                      items:
-                          $ref: "#/definitions/ProjetoExtensao"
-  /projeto/pesquisa:
-      get:
-          tags:
-          - "Projeto"
-          summary: "TODO"
-          description: "TODO"
-          operationId: "projetoPesquisa"
-          consumes:
-          - "application/json"
-          produces:
-          - "application/json"
-          responses:
-              "200":
-                  description: Consulta realizada com sucesso
-                  schema:
-                      type: "array"
-                      items:
-                          $ref: "#/definitions/ProjetoExtensao"
-  /pos/curso:
-      get:
-          tags:
-          - "Pós Graduação"
-          summary: "Cursos da pós graduação"
-          description: "Cursos da pós graduação"
-          operationId: "posCurso"
-          consumes:
-          - "application/json"
-          produces:
-          - "application/json"
-          responses:
-              "200":
-                  description: Consulta realizada com sucesso
-                  schema:
-                      type: "array"
-                      items:
-                          $ref: "#/definitions/CursoPosGraduacao"
-  /pos/processoSeletivo:
-    get:
-      tags:
-      - "Pós Graduação"
-      summary: "Processo seletivo da pós graduação"
-      description: "Processo seletivo realizados para pós graduação"
-      operationId: "posProcessoSeletivo"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-          "200":
-              description: Consulta realizada com sucesso
-              schema:
-                  type: "array"
-                  items:
-                      $ref: "#/definitions/ProcessoSeletivoPosGraduacao"
-  /pos/discente:
-    get:
-      tags:
-      - "Pós Graduação"
-      summary: "Discente da pós graduação"
-      description: "Discente da pós graduação"
-      operationId: "posDiscente"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-          "200":
-              description: Consulta realizada com sucesso
-              schema:
-                  type: "array"
-                  items:
-                      $ref: "#/definitions/DiscentePosGraduacao"
-  /auxilio/beneficiario:
-    get:
-      tags:
-      - "Auxílio"
-      summary: "Beneficiários do auxílio"
-      description: "Beneficiários do auxílio"
-      operationId: "auxilioBeneficiario"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-          "200":
-              description: Consulta realizada com sucesso
-              schema:
-                  type: "array"
-                  items:
-                      $ref: "#/definitions/BeneficiarioAuxilio"
-  /despesa/covid:
-    get:
-      tags:
-      - "Despesa"
-      summary: "Beneficiários do auxílio"
-      description: "Beneficiários do auxílio"
-      operationId: "despesaCovid"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-          "200":
-              description: Despesas de covid
-              schema:
-                  type: "array"
-                  items:
-                      $ref: "#/definitions/DespesaCovid"
+                      $ref: "#/definitions/ObterConteudoDatasetResponse"
 
 definitions:
-  Discente:
-    description: "811bc878-00e7-4daa-b1e8-ee63b28f9019-GRADUACAO-ESTUDANTES-INGRESSANTES"
+  ObterConteudoDatasetResponse:
     type: "object"
     properties:
-        _id:
+        help:
             type: string
-        raca:
+            example: "https://dados.uffs.edu.br/api/3/action/help_show?name=datastore_search"
+        success:
+            type: boolean
+            example: true
+        result:
+            $ref: "#/definitions/ResourceResponseResultResponse"
+
+  ResourceResponseResultResponse:
+    type: "object"
+    properties:
+        include_total:
+            type: boolean
+            example: true
+        resource_id:
             type: string
-        genero:
+            example: "f54123ff-40b6-40bd-9fce-b8a4a7f8b219"
+        fields:
+            type: "array"
+            items:
+                $ref: "#/definitions/ResourceResponseResultFieldResponse"
+        records_format:
             type: string
-        ano_ingresso:
+            example: "lists"
+        _links:
+            $ref: "#/definitions/LinksResponse"
+        filters:
+            $ref: "#/definitions/Filters"
+        total:
+            type: integer
+            example: 1
+        recordsWithRelationships:
+            type: "array"
+            items:
+                $ref: "#/definitions/ResourceComRelacionamentoResponse"
+
+  ResourceResponseResultFieldResponse:
+    type: "object"
+    properties:
+        type:
             type: string
-        semestre_ingresso:
-            type: string
-        forma_ingresso:
-            type: string
-        modalidade_inscricao:
-            type: string
-        sit_matricula:
-            type: string
-        cod_uffs:
-            type: string
-        cod_emec:
-            type: string
-        nome_curso:
-            type: string
-        modalidade:
-            type: string
-        linha_formacao:
-            type: string
-        turno:
-            type: string
-        desc_matriz:
-            type: string
-        nome_campus:
-            type: string
-        regime:
-            type: string
-        formato:
-            type: string
-        data_atualizacao:
+        id:
             type: string
 
-  BeneficiarioAuxilio:
-    description: f43675af-4e11-4471-a736-79404328eba8-BENEFICIARIOS-AUXILIO
+  LinksResponse:
     type: "object"
     properties:
-        _id:
+        start:
             type: string
-        campus:
+            example: "/api/3/action/datastore_search?records_format=lists&filters=%7B%22_id%22%3A%22286bd0bf-1a6e-4b32-b2a3-cf186d3f7b20%22%7D&resource_id=f54123ff-40b6-40bd-9fce-b8a4a7f8b219"
+        next:
             type: string
-        matricula:
-            type: string
-        cpf:
-            type: string
-        ano:
-            type: string
-        mes:
-            type: string
-        nome:
-            type: string
-        Alimentação [1]:
-            type: string
-        Alimentação [2]:
-            type: string
-        Creche [1]:
-            type: string
-        Estudantil [1]:
-            type: string
-        Moradia [1]:
-            type: string
-        Transporte I [1]:
-            type: string
-        Transporte II [1]:
-            type: string
-        Transporte III [1]:
-            type: string
-        data_atualizacao:
-            type: string
+            example: "/api/3/action/datastore_search?offset=100&records_format=lists&filters=%7B%22_id%22%3A%22286bd0bf-1a6e-4b32-b2a3-cf186d3f7b20%22%7D&resource_id=f54123ff-40b6-40bd-9fce-b8a4a7f8b219"
 
-  MatriculadoTurmaGraduacao:
-    description: a2893fa8-1a14-4d95-a815-5251c1ef75f6-MATRICULADOS-TURMAS-GRADUACAO
+  Filters:
     type: "object"
     properties:
         _id:
             type: string
-        nome_campus:
-            type: string
-        ano:
-            type: string
-        semestre:
-            type: string
-        cod_uffs:
-            type: string
-        cod_emec:
-            type: string
-        nome_curso:
-            type: string
-        cod_ccr:
-            type: string
-        nome_ccr:
-            type: string
-        id_turma:
-            type: string
-        desc_turma:
-            type: string
-        lista_docentes_ch:
-            type: string
-        matricula_turma_id:
-            type: string
-        numero_faltas:
-            type: string
-        freq_turma:
-            type: string
-        media_final:
-            type: string
-        sit_turma:
-            type: string
-        data_atualizacao:
-            type: string
+            example: "286bd0bf-1a6e-4b32-b2a3-cf186d3f7b20"
 
-  TurmaGraduacao:
-    description: e14343b8-51eb-46aa-a51e-e3c5d7d497db-TURMAS-GRADUACAO
+  ResourceComRelacionamentoResponse:
     type: "object"
     properties:
-        _id:
-            type: string
-        nome_campus:
-            type: string
-        ano:
-            type: string
-        semestre:
-            type: string
-        cod_ccr:
-            type: string
-        nome_ccr:
-            type: string
-        cr_ccr:
-            type: string
-        ch_ccr:
-            type: string
-        id_turma:
-            type: string
-        desc_turma:
-            type: string
-        tem_turma:
-            type: string
-        cod_uffs_curso_turma:
-            type: string
-        curso_turma:
-            type: string
-        fase_turma:
-            type: string
-        lista_docentes_ch:
-            type: string
-        ch_teorica:
-            type: string
-        ch_pratica:
-            type: string
-        vagas_turma:
-            type: string
-        qtd_inscritos:
-            type: string
-        qtd_concluiram:
-            type: string
-        sit_turma:
-            type: string
-        data_atualizacao:
-            type: string
+        camposOriginais:
+            $ref: "#/definitions/CamposOriginaisResponse"
+        camposRelacionados:
+            type: "array"
+            items:
+                $ref: "#/definitions/CamposRelacionadosResponse"
 
-  CcrMatrizGraduacao:
-    description: Informações sobre a matéria. Cada turma está associada a uma matérias(ccr) d1eb86f1-58b2-4552-8c1c-60509f565563-CCR-MATRIZ-GRADUACAO
+  CamposOriginaisResponse:
     type: "object"
     properties:
-        _id:
+        nome_campo_x:
             type: string
-        cod_ccr:
-            type: string
-        nome_ccr:
-            type: string
-        cr_ccr:
-            type: string
-        ch_ccr:
-            type: string
-        desc_matriz:
-            type: string
-        fase_oferta:
-            type: string
-        ccr_obrigatorio:
-            type: string
-        ccr_optativo:
-            type: string
-        nome_campus:
-            type: string
-        cod_uffs:
-            type: string
-        cod_emec:
-            type: string
-        nome_curso:
-            type: string
-        turno:
-            type: string
-        per_ingresso:
-            type: string
-        em_andamento:
-            type: string
-        data_atualizacao:
-            type: string
+            example: "valor_campo_x"
 
-  ProjetoPesquisa:
-    description: f54123ff-40b6-40bd-9fce-b8a4a7f8b219-PROJETO-PESQUISA
+  CamposRelacionadosResponse:
     type: "object"
     properties:
-        _id:
+        nome_campo_x:
             type: string
-        projeto_registro:
-            type: string
-        projeto_titulo:
-            type: string
-        coordenador:
-            type: string
-        nome_campus:
-            type: string
-        desc_area_cnpq:
-            type: string
-        palavras_chave:
-            type: string
-        resumo:
-            type: string
-        modalidade:
-            type: string
-        grupos_pesquisa:
-            type: string
-        projeto_pai_registro:
-            type: string
-        data_atualizacao:
-            type: string
-
-  ProjetoExtensao:
-    description: 75eb15ab-c30f-4c40-8c19-a5bf936a0aa5-PROJETO-EXTENSAO
-    type: "object"
-    properties:
-        _id:
-            type: string
-        projeto_registro:
-            type: string
-        projeto_titulo:
-            type: string
-        coordenador:
-            type: string
-        nome_campus:
-            type: string
-        desc_area_cnpq:
-            type: string
-        palavras_chave:
-            type: string
-        resumo:
-            type: string
-        modalidade:
-            type: string
-        situacao:
-            type: string
-        data_atualizacao:
-            type: string
-
-  ProjetoCultura:
-    description: ecee5e45-3246-488d-9cdc-c89eff8e26bd-PROJETO-CULTURA
-    type: "object"
-    properties:
-        _id:
-            type: string
-        projeto_registro:
-            type: string
-        projeto_titulo:
-            type: string
-        coordenador:
-            type: string
-        nome_campus:
-            type: string
-        desc_area_cnpq:
-            type: string
-        palavras_chave:
-            type: string
-        resumo:
-            type: string
-        modalidade:
-            type: string
-        situacao:
-            type: string
-        data_atualizacao:
-            type: string
-
-  MatrizGraduacao:
-    description: Matrizes disponíveis para os cursos. No caso de CC provavelmente é o ppc novo e o antigo. 6a555c77-c1fc-45e1-9c61-4cca8a01ab64-MATRIZES-GRADUACAO
-    type: "object"
-    properties:
-        _id:
-            type: string
-        nome_campus:
-            type: string
-        cod_uffs:
-            type: string
-        cod_emec:
-            type: string
-        nome_curso:
-            type: string
-        turno:
-            type: string
-        modalidade:
-            type: string
-        regime:
-            type: string
-        desc_matriz:
-            type: string
-        ano:
-            type: string
-        semestre:
-            type: string
-        permite_ingresso:
-            type: string
-        em_andamento:
-            type: string
-        ch_obrigatoria:
-            type: string
-        ch_optativa:
-            type: string
-        ch_eletiva:
-            type: string
-        ch_accs:
-            type: string
-        ch_total:
-            type: string
-        ch_max_sem:
-            type: string
-        ch_min_sem:
-            type: string
-        ch_1a_fase:
-            type: string
-        quant_semestres:
-            type: string
-        limite_semestres:
-            type: string
-        linha_formacao:
-            type: string
-        data_atualizacao:
-            type: string
-
-  CursoGraduacao:
-    description: c35a0c22-fe50-4d7c-8339-7f253fe7e977-GRADUACAO-CURSOS
-    type: "object"
-    properties:
-        _id:
-            type: string
-        nome_campus:
-            type: string
-        cod_uffs:
-            type: string
-        cod_emec:
-            type: string
-        nome_curso:
-            type: string
-        turno:
-            type: string
-        in_func:
-            type: string
-        linha_formacao:
-            type: string
-        modalidade:
-            type: string
-        regime:
-            type: string
-        formato:
-            type: string
-        coord_curso:
-            type: string
-        autorizacao:
-            type: string
-        reconhecimento:
-            type: string
-        renov_reconhecimento:
-            type: string
-        possui_matriz_em_andamento:
-            type: string
-        possui_matriz_permite_ingresso:
-            type: string
-        data_atualizacao:
-            type: string
-
-  CursoPosGraduacao:
-    description: d1f0607c-f1ee-4a5f-986f-8969f6448446-POS-GRADUACAO-CURSOS
-    type: "object"
-    properties:
-        _id:
-            type: string
-        id_curso:
-            type: string
-        nome:
-            type: string
-        nome_campus:
-            type: string
-        municipio:
-            type: string
-        uf:
-            type: string
-        coordenador:
-            type: string
-        situacao_curso:
-            type: string
-        ciclo_academico:
-            type: string
-        nivel_academico:
-            type: string
-        modalidade:
-            type: string
-        regime:
-            type: string
-        homepage_curso:
-            type: string
-        programa:
-            type: string
-        area_capes:
-            type: string
-        data_atualizacao:
-            type: string
-
-  ProcessoSeletivoPosGraduacao:
-    description: a6633b6a-530f-425e-a8eb-8c4188408319-POS-GRADUACAO-PROCESSO-SELETIVO
-    type: "object"
-    properties:
-        _id:
-            type: string
-        processo_seletivo:
-            type: string
-        nome_curso:
-            type: string
-        semestre_oferta:
-            type: string
-        ano_oferta:
-            type: string
-        data_inicio_matriculas:
-            type: string
-        data_fim_matriculas:
-            type: string
-        vagas:
-            type: string
-        data_atualizacao:
-            type: string
-
-  DiscentePosGraduacao:
-    description: e6fda990-4aa6-49d9-b6d7-1d649aa19902-DISCENTES-CURSOS-POS-GRADUACAO
-    type: "object"
-    properties:
-        _id:
-            type: string
-        numero_matricula:
-            type: string
-        nome_publico:
-            type: string
-        ano_oferta:
-            type: string
-        semestre_oferta:
-            type: string
-        modo_ingresso:
-            type: string
-        tipo_discente:
-            type: string
-        situacao:
-            type: string
-        ciclo_academico:
-            type: string
-        nivel_academico:
-            type: string
-        id_curso:
-            type: string
-        nome_curso:
-            type: string
-        modalidade:
-            type: string
-        nome_campus:
-            type: string
-        data_atualizacao:
-            type: string
-
-  DespesaCovid:
-    description: 1a00d8dc-046c-479b-99c5-1803db270454-DESPESAS-COVID
-    type: "object"
-    properties:
-        _id:
-            type: string
-        ano:
-            type: string
-        objeto:
-            type: string
-        beneficiario_codigo:
-            type: string
-        beneficiario:
-            type: string
-        valor_ajuste:
-            type: string
-        valor_parcela:
-            type: string
-        empenho:
-            type: string
-        item:
-            type: string
-        favorecido_cnpj:
-            type: string
-        favorecido:
-            type: string
-        pregao:
-            type: string
-        processo_numero:
-            type: string
-        processo:
-            type: string
-        data_atualizacao:
-            type: string
-  Docente:
-    type: "object"
-    properties:
-        nome:
-            type: string
-        curso_graduacao:
-            type: string
-        turma_graduacao:
-            type: string
-        projeto_pesquisa:
-            type: string
-        projeto_extensao:
-            type: string
-        projeto_cultura:
-            type: string
+            example: "valor_campo_x"
