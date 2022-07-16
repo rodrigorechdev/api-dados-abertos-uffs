@@ -60,7 +60,8 @@ public class DiscenteWorkflow {
 
         ResourceResponse datasetPrincipalConteudo = obterConteudoRecursoPrincipalActivity.execute(datasetNome, hashRecursoEstrutura, filtros);
         var conteudoDatasetPrincipalSemRelacionamento = jsonArrayToListaDeRegistrosActivity.execute(datasetPrincipalConteudo);
-        var conteudoDatasetPrincipalComRelacionamento = obterConteudoRecursoRelacionadoActivity.execute(conteudoDatasetPrincipalSemRelacionamento, datasetNome, hashRecursoEstrutura);
+
+        var conteudoDatasetPrincipalComRelacionamento = obterConteudoRecursoRelacionadoActivity.execute(relacionamentos, datasetNome, conteudoDatasetPrincipalSemRelacionamento, hashRecursoEstrutura);
 
         return criarObterDatasetConteudoResponse.execute(datasetPrincipalConteudo, conteudoDatasetPrincipalComRelacionamento);
     }
@@ -72,17 +73,15 @@ public class DiscenteWorkflow {
      * @throws IOException
      */
     private HashMap<String, ResourceEstrutura> obterRecursoEstrutura(List<String> relacionamentos) throws IOException, InterruptedException {
-        HashMap<String, ResourceEstrutura> hashRecursoEstruturaPorDataset;
         if(cache.atualizacaoNecessaria()) {
-            var nomesDatasets = obterNomesDatasets.execute();
-            hashRecursoEstruturaPorDataset = obterIdRecursosPorDataset.execute(nomesDatasets);
+            HashMap<String, ResourceEstrutura> hashRecursoEstruturaPorDataset = obterIdRecursosPorDataset.execute(obterNomesDatasets.execute());
             obterCamposRecurso.execute(hashRecursoEstruturaPorDataset);
-
+            obterColunasRelacionadas.execute(hashRecursoEstruturaPorDataset);
             cache.atualizarCache(hashRecursoEstruturaPorDataset);
-        } else {
-            hashRecursoEstruturaPorDataset = cache.getHashRecursoEstruturaPorDataset();
-        }
 
-        return obterColunasRelacionadas.execute(hashRecursoEstruturaPorDataset, relacionamentos);
+            return hashRecursoEstruturaPorDataset;
+        } else {
+            return cache.getHashRecursoEstruturaPorDataset();
+        }
     }
 }
