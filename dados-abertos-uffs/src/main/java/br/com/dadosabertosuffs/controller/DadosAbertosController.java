@@ -38,14 +38,14 @@ public class DadosAbertosController {
 
     @RequestMapping(value = "/dataset/{datasetName}/resource", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> obterRecurso(@PathVariable String datasetName, @RequestHeader(required = false) String filtros, @RequestHeader(required = false) String relacionamentos) throws IOException, InterruptedException {
-        var listRelacionamentos = (relacionamentos == null) ? null : formatarRelacionamentos(relacionamentos);
+        var listRelacionamentos = (relacionamentos == null) ? null : formatarRelacionamentosCsv(relacionamentos);
         var conteudoDatasetPrincipalComRelacionamento = discenteWorkflow.obterDatasetConteudo(datasetName, filtros, listRelacionamentos);
         var response = new Gson().toJson(conteudoDatasetPrincipalComRelacionamento);
 
         return new ResponseEntity<String>(response, HttpStatus.OK);
     }
 
-    public List<String> formatarRelacionamentos(String relacionamentos) {
+    public List<String> formatarRelacionamentosCsv(String relacionamentos) {
         return Arrays.asList(
             relacionamentos.trim().split(",")
         );
