@@ -58,7 +58,7 @@ public class DiscenteWorkflow {
     public ResourceResponse obterDatasetConteudo(String datasetNome, String filtros, List<String> relacionamentos) throws IOException, InterruptedException {
         var hashRecursoEstrutura = obterRecursoEstrutura(relacionamentos);
 
-        ResourceResponse datasetPrincipalConteudo = obterConteudoRecursoPrincipalActivity.execute(datasetNome, hashRecursoEstrutura, filtros);
+        ResourceResponse datasetPrincipalConteudo = obterConteudoRecursoPrincipalActivity.execute(hashRecursoEstrutura.get(datasetNome).getId(), filtros);
         var conteudoDatasetPrincipalSemRelacionamento = jsonArrayToListaDeRegistrosActivity.execute(datasetPrincipalConteudo);
 
         var conteudoDatasetPrincipalComRelacionamento = obterConteudoRecursoRelacionadoActivity.execute(relacionamentos, datasetNome, conteudoDatasetPrincipalSemRelacionamento, hashRecursoEstrutura);
