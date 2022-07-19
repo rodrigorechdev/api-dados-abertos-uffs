@@ -147,6 +147,12 @@ definitions:
   CamposRelacionadosResponse:
     type: "object"
     properties:
-        nome_campo_x:
+        nomeDataset:
             type: string
-            example: "valor_campo_x"
+            example: "projetos_cultura"
+        nomeCampoRelacionado:
+            type: string
+            example: "coordenador"
+        conteudoRecurso:
+            type: string
+            example: "retorno da consulta"
