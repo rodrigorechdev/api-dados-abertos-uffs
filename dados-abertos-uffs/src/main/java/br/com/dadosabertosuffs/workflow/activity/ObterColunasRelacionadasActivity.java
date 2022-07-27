@@ -26,8 +26,8 @@ public class ObterColunasRelacionadasActivity {
                         if(!nomeDataset.equals(nomeDataset2)) {//desconsidera datasets iguais
                             resource1.getCampos().forEach((campo1) -> {//varre campos do dataset1
                                     resource2.getCampos().forEach((campo2) -> {//varre campos do dataset2
-                                            if(recursosSaoRelacionados(campo1, campo2)) {      
-                                                var novaColunaRelacionada = new ColunasRelacionadas(nomeDataset, campo2.getId());
+                                            if(recursosSaoRelacionados(campo1, campo2)) {   
+                                                var novaColunaRelacionada = new ColunasRelacionadas(nomeDataset2, campo2.getId());
                                                 addRelacionamentoNoHash(nomeDataset, hashRecursosPorDataset, novaColunaRelacionada);
                                             }
                                         }
