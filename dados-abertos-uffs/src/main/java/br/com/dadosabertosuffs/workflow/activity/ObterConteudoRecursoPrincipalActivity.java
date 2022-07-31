@@ -1,5 +1,7 @@
 package br.com.dadosabertosuffs.workflow.activity;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +21,7 @@ public class ObterConteudoRecursoPrincipalActivity {
 
     
     public ResourceResponse execute(String idDataset, String filtros) throws JsonProcessingException {    
-        String datasetConteudo = (filtros == null) ?
-            obterResourceService.obterRecursoConteudo(idDataset) :
-            obterResourceService.obterRecursoConteudo(idDataset, filtros);
+        String datasetConteudo = obterResourceService.obterRecursoConteudo(idDataset, Optional.ofNullable(filtros));
 
         return new Gson().fromJson(datasetConteudo, ResourceResponse.class);
     }

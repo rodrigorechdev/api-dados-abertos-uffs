@@ -2,6 +2,9 @@ package br.com.dadosabertosuffs.workflow.service.impl;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -34,31 +37,15 @@ public class ObterResourceServiceImpl extends ServiceUtils implements ObterResou
     }
 
     @Override
-    public String obterRecursoConteudo(String idRecurso) {
-        try {
-            var httpRequest = criarRequest(obterUriObterDatastoreConteudo(idRecurso));
-            return super.obterResponseBody(httpRequest);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
-    }
-
-    @Override
     public String obterRecursoConteudo(String idRecurso, String filtroChave, String filtroValor) {
-        try {
-            var httpRequest = criarRequest(obterUriObterDatastoreConteudo(idRecurso, filtroChave, filtroValor));
-            return super.obterResponseBody(httpRequest);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
+        var filtroJson = "{\"" + filtroChave + "\":\"" + filtroValor + "\"}";
+        return obterRecursoConteudo(idRecurso, Optional.of(filtroJson));
     }
 
     @Override
-    public String obterRecursoConteudo(String idRecurso, String filtroJson) {
+    public String obterRecursoConteudo(String idRecurso, Optional<String> filtroJsonOptional) {
         try {
-            var httpRequest = criarRequest(obterUriObterDatastoreConteudo(idRecurso, filtroJson));
+            var httpRequest = criarRequest(obterUriObterDatastoreConteudo(idRecurso, filtroJsonOptional));
             return super.obterResponseBody(httpRequest);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -75,33 +62,23 @@ public class ObterResourceServiceImpl extends ServiceUtils implements ObterResou
         .build()
         .toUri();
     }
+
+    /**
+     * O encoding do filtro está sendo realizado pelo URLEncoder em vez do encoding do UriComponentsBuilder
+     * pois o UriComponentsBuilder não estava codificando caracteres como : e }, isso não estava sendo
+     * aceito pelo Ckan, já o URLEncoder codifica estes carácteres.
+     */
+    private URI obterUriObterDatastoreConteudo(String idResource, Optional<String> filtroJsonOptional) {
+        if(filtroJsonOptional.isPresent()) {
+            filtroJsonOptional = Optional.of(URLEncoder.encode(filtroJsonOptional.get(), StandardCharsets.UTF_8));
+        }
         
-    private URI obterUriObterDatastoreConteudo(String idResource) {
         return UriComponentsBuilder.fromUriString(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
         .path(DadosAbertosConst.PATH_DATASTORE_SEARCH)
         .queryParam(DadosAbertosConst.QUERY_FORMATO_CONTEUDO, "lists")
         .queryParam(DadosAbertosConst.QUERY_RESOURCE_ID, idResource)
-        .build()
-        .toUri();
-    }
-
-    private URI obterUriObterDatastoreConteudo(String idResource, String filtroChave, String filtroValor) {    
-        return UriComponentsBuilder.fromUriString(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
-        .path(DadosAbertosConst.PATH_DATASTORE_SEARCH)
-        .queryParam(DadosAbertosConst.QUERY_FORMATO_CONTEUDO, "lists")
-        .queryParam(DadosAbertosConst.QUERY_RESOURCE_ID, idResource)
-        .queryParam(DadosAbertosConst.QUERY_FILTRO, "{\"" + filtroChave + "\":\"" + filtroValor + "\"}")
-        .build()
-        .toUri();
-    }
-
-    private URI obterUriObterDatastoreConteudo(String idResource, String filtroJson) {    
-        return UriComponentsBuilder.fromUriString(DadosAbertosConst.URL_PORTAL_DADOS_ABERTOS_UFFS)
-        .path(DadosAbertosConst.PATH_DATASTORE_SEARCH)
-        .queryParam(DadosAbertosConst.QUERY_FORMATO_CONTEUDO, "lists")
-        .queryParam(DadosAbertosConst.QUERY_RESOURCE_ID, idResource)
-        .queryParam(DadosAbertosConst.QUERY_FILTRO, filtroJson)
-        .build()
+        .queryParamIfPresent(DadosAbertosConst.QUERY_FILTRO, filtroJsonOptional)
+        .build(true)
         .toUri();
     }
 }
