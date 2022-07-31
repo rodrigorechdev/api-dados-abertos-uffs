@@ -14,7 +14,6 @@ import com.google.gson.Gson;
 
 import br.com.dadosabertosuffs.constant.DadosAbertosConst;
 import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponse;
-import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponseResult;
 import br.com.dadosabertosuffs.workflow.service.ObterResourceService;
 import lombok.RequiredArgsConstructor;
 
@@ -24,12 +23,12 @@ import lombok.RequiredArgsConstructor;
 public class ObterResourceServiceImpl extends ServiceUtils implements ObterResourceService {
     
     @Override
-    public ResourceResponseResult obterRecursoCampos(String idRecurso) {
+    public ResourceResponse obterRecursoCampos(String idRecurso) {
         try {
             var httpRequest = super.criarRequest(obterUriObterRecursoCampos(idRecurso));
             var responseBody = super.obterResponseBody(httpRequest);
         
-            return new Gson().fromJson(responseBody, ResourceResponse.class).getResult();
+            return new Gson().fromJson(responseBody, ResourceResponse.class);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             throw new RuntimeException();
@@ -37,16 +36,17 @@ public class ObterResourceServiceImpl extends ServiceUtils implements ObterResou
     }
 
     @Override
-    public String obterRecursoConteudo(String idRecurso, String filtroChave, String filtroValor) {
+    public ResourceResponse obterRecursoConteudo(String idRecurso, String filtroChave, String filtroValor) {
         var filtroJson = "{\"" + filtroChave + "\":\"" + filtroValor + "\"}";
         return obterRecursoConteudo(idRecurso, Optional.of(filtroJson));
     }
 
     @Override
-    public String obterRecursoConteudo(String idRecurso, Optional<String> filtroJsonOptional) {
+    public ResourceResponse obterRecursoConteudo(String idRecurso, Optional<String> filtroJsonOptional) {
         try {
             var httpRequest = criarRequest(obterUriObterDatastoreConteudo(idRecurso, filtroJsonOptional));
-            return super.obterResponseBody(httpRequest);
+            return new Gson().fromJson(super.obterResponseBody(httpRequest), ResourceResponse.class);
+
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             throw new RuntimeException();

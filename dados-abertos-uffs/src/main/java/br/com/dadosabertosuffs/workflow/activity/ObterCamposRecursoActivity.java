@@ -21,7 +21,7 @@ public class ObterCamposRecursoActivity {
         
         hashIdRecursosPorDataset.forEach((nomeDataset, resource) -> {
             var recursoConteudo = obterResourceService.obterRecursoCampos(resource.getId());
-            resource.setCampos(recursoConteudo.getFields());
+            resource.setCampos(recursoConteudo.getResult().getFields());
         });
 
         return hashIdRecursosPorDataset;

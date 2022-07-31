@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import br.com.dadosabertosuffs.entity.dto.ResourceComRelacionamentoResponse;
+import br.com.dadosabertosuffs.entity.dto.ResourceWithRelationshipResponse;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -27,6 +27,6 @@ public class ResourceResponseResult {
     private Integer total;
 
     /**Campo não recebido da API da UFFS, criado pela API atual. */
-    private List<ResourceComRelacionamentoResponse> recordsWithRelationships;
+    private List<ResourceWithRelationshipResponse> recordsWithRelationships;
 
 }

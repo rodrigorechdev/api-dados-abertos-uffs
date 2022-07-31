@@ -1,7 +1,6 @@
 package br.com.dadosabertosuffs.entity.dto;
 
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-
+import br.com.dadosabertosuffs.entity.httpresponse.ResourceResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ResourceRelacionado {
-    private String nomeDataset;
-    private String nomeCampoRelacionado;
-    private JSONObject conteudoRecurso;
+    private String datasetName;
+    private String fieldName;
+    private ResourceResponse content;
 }

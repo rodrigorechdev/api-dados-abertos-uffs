@@ -130,29 +130,29 @@ definitions:
   ResourceComRelacionamentoResponse:
     type: "object"
     properties:
-        camposOriginais:
-            $ref: "#/definitions/CamposOriginaisResponse"
-        camposRelacionados:
+        mainResource:
+            $ref: "#/definitions/MainResourceResponse"
+        relatedResources:
             type: "array"
             items:
-                $ref: "#/definitions/CamposRelacionadosResponse"
+                $ref: "#/definitions/RelatedResourcesResponse"
 
-  CamposOriginaisResponse:
+  MainResourceResponse:
     type: "object"
     properties:
         nome_campo_x:
             type: string
             example: "valor_campo_x"
 
-  CamposRelacionadosResponse:
+  RelatedResourcesResponse:
     type: "object"
     properties:
-        nomeDataset:
+        datasetName:
             type: string
             example: "projetos_cultura"
-        nomeCampoRelacionado:
+        fieldName:
             type: string
             example: "coordenador"
-        conteudoRecurso:
+        content:
             type: string
             example: "retorno da consulta"
